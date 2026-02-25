@@ -7,15 +7,7 @@
 
 import SwiftUI
 
-struct ContentView: View {
-    var body: some View {
-    }
-}
-
-  
-import SwiftUI
-
-// Helper per il colore HEX
+// MARK: - Helper per il colore HEX (Mantenuto com'era)
 extension Color {
     init(hex: String) {
         let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
@@ -28,6 +20,9 @@ extension Color {
 }
 
 struct SettingsView: View {
+    // 1. Variabile per chiudere la modale
+    @Environment(\.dismiss) var dismiss
+    
     // VARIABILI SALVATE (Persistenti)
     @AppStorage("setHour") private var setHourSelection: Double = Date().timeIntervalSince1970
     @AppStorage("durationMinutes") private var durationMinutes = 15
@@ -84,12 +79,10 @@ struct SettingsView: View {
                     
                     if notificationsEnabled {
                         Picker("Remind me", selection: $leadTime) {
-                            
                             Text("5 min before").tag(5)
                             Text("10 min before").tag(10)
                             Text("15 min before").tag(15)
                             Text("30 min before").tag(30)
-
                         }
                         .pickerStyle(.menu)
                         .tint(myAccentColor)
@@ -99,13 +92,16 @@ struct SettingsView: View {
             .listStyle(InsetGroupedListStyle())
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)
-            // PULSANTE SALVA
+            
+            // MARK: - Toolbar con pulsante Save funzionante
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Save") {
-                        // Con AppStorage i dati sono già salvati,
-                        // qui puoi aggiungere un feedback o chiudere la vista
+                        // Feedback in console
                         print("Impostazioni salvate con successo!")
+                        
+                        // 2. Chiude la modale e torna alla Home
+                        dismiss()
                     }
                     .fontWeight(.bold)
                     .foregroundColor(myAccentColor)
