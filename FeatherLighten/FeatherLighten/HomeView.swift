@@ -12,6 +12,7 @@ struct HomeView: View {
     // MARK: - Persistenza Dati (Sincronizzata con Settings)
     @AppStorage("setHour") private var setHourSelection: Double = Date().timeIntervalSince1970
     @State private var showingSettings = false // Stato per la modale
+    @State private var showingCalendar = false // Stato per il calendario
     
     // MARK: - Logica Temporale Dinamica
     private var worryTimeHour: Int {
@@ -136,7 +137,7 @@ struct HomeView: View {
                 .toolbar {
                     ToolbarItemGroup(placement: .topBarTrailing) {
                         Button {
-                            // Azione Calendario
+                            showingCalendar = true
                         } label: {
                             Image(systemName: "calendar")
                                 .font(.system(size: 18, weight: .semibold))
@@ -158,10 +159,15 @@ struct HomeView: View {
                     SettingsView() // Apre il tuo file SettingsView.swift
                         .presentationDragIndicator(.visible) // Aggiunge la maniglia per chiudere
                 }
+                .sheet(isPresented: $showingCalendar) {
+                    CalendarView()
+                        .presentationDragIndicator(.visible)
+                }
             }
         }
     }
-}
+    }
+
 
 
 #Preview {
